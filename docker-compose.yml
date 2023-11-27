@@ -1,0 +1,21 @@
+version: '3.11.3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: dockerfile.django
+      args:
+        - REQUIREMENTS_FILE=requirements_django.txt
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+  mongo:
+    build:
+      context: .
+      dockerfile: dockerfile.mongo
+      args:
+        - REQUIREMENTS_FILE=requirements_mongo.txt
+    ports:
+      - "27017:27017"

@@ -1,0 +1,11 @@
+FROM python:3.11.3
+
+WORKDIR /app
+
+ARG DJANGO_REQUIREMENTS_FILE
+COPY $DJANGO_REQUIREMENTS_FILE requirements_django.txt
+RUN pip install -r requirements_django.txt
+
+COPY . .
+
+CMD python manage.py runserver 0.0.0.0:8000
