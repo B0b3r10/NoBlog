@@ -1,10 +1,8 @@
-FROM python:3.11.3
-
-WORKDIR /app
+FROM python:3.11
 
 ARG MONGO_REQUIREMENTS_FILE
-COPY $MONGO_REQUIREMENTS_FILE requirements_mongo.txt
+COPY $MONGO_REQUIREMENTS_FILE requirements.txt
 
-RUN pip install -r requirements_mongo.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 27017
