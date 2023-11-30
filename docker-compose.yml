@@ -1,51 +1,51 @@
-version: '3.11'
 volumes:
   init-db:
   data-db:
 
 services:
-  mongodb:
+  app:
+    build: .
+    volumes:
+      - .:/djangoProject
+    ports:
+      - "8000:8000"
+    image: app:djangoProject
+    container_name: blog_container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+  db:
     image: mongo
     restart: always
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: root1234
+        MONGO_INITDB_DATABASE: django
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
       - ./data-db:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: root1234
-      MONGO_INITDB_DATABASE: django_mongodb_docker
     ports:
-      - 27017:27017
-
-  web:
-    image: none
-    restart: always
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/django_mongodb_docker
-    ports:
-      - 8000:8000
-    links:
-      - mongodb
-    depends_on:
-      - migration
-
+      - "27017:27017"
+    container_name: mongo_container
+#    depends_on:
+#      - migration
+#
   migration:
     build: .
     command: python manage.py migrate
     volumes:
-      - .:/django_mongodb_docker
+      - .:/django
     links:
-      - mongodb
+      - db
     depends_on:
       - make_migrations
-
+#
   make_migrations:
     build: .
     command: python manage.py makemigrations
     volumes:
-      - .:/django_mongodb_docker
+      - .:/django
     links:
-      - mongodb
+      - db
     depends_on:
-      - mongodb
+      - db
