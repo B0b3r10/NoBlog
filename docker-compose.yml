@@ -19,7 +19,7 @@ services:
       - "8000:8000"
     image: app:djangoProject
     container_name: blog_container
-    command: python manage.py runserver 0.0.0.0:8000; python manage.py migrate
+    command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
     networks:
