@@ -3,6 +3,14 @@ volumes:
   data-db:
 
 services:
+  db:
+    image: mongodb/mongodb-community-server:7.0.2-ubi8
+    ports:
+      - "27017:27017"
+    container_name: mongo_container1
+    networks:
+      - backend
+
   app:
     build: .
     volumes:
@@ -11,41 +19,10 @@ services:
       - "8000:8000"
     image: app:djangoProject
     container_name: blog_container
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000; python manage.py migrate
     depends_on:
       - db
-  db:
-    image: mongo
-    restart: always
-    environment:
-        MONGO_INITDB_ROOT_USERNAME: admin
-        MONGO_INITDB_ROOT_PASSWORD: root1234
-        MONGO_INITDB_DATABASE: django
-    volumes:
-      - ./init-db:/docker-entrypoint-initdb.d
-      - ./data-db:/data/db
-    ports:
-      - "27017:27017"
-    container_name: mongo_container
-#    depends_on:
-#      - migration
-#
-  migration:
-    build: .
-    command: python manage.py migrate
-    volumes:
-      - .:/django
-    links:
-      - db
-    depends_on:
-      - make_migrations
-#
-  make_migrations:
-    build: .
-    command: python manage.py makemigrations
-    volumes:
-      - .:/django
-    links:
-      - db
-    depends_on:
-      - db
+    networks:
+      - backend
+networks:
+  backend:

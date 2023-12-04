@@ -33,12 +33,12 @@
                                 МО
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/stat" style="color: #c8c8c8;">Фильтр нецензурных слов</a></li>
-                                <li><a class="dropdown-item" href="/gray" style="color: #c8c8c8;">Прогнозирование погоды</a></li>
+                                <li><a class="dropdown-item" href="/stat" style="color: #000000;">Фильтр нецензурных слов</a></li>
+                                <li><a class="dropdown-item" href="/gray" style="color: #000000;">Прогнозирование погоды</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="/imput" style="color: #c8c8c8;">Импутация данных</a></li>
+                                <li><a class="dropdown-item" href="/imput" style="color: #000000;">Импутация данных</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -52,7 +52,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
                 crossorigin="anonymous"></script>
+        <div id="google_element"></div>
+        <script src="http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+        <script>
+            function loadGoogleTranslate(){
+                new google.translate.TranslateElement('google_element')
+            }
+        </script>
 
     </div>
 </div>
 </body>
+</html>

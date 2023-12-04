@@ -71,9 +71,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'django',
         'CLIENT': {
-            'host': 'mongodb://db:27017',
-            'username': 'admin',
-            'password': 'root1234',
+            'host': 'mongodb://db:27017/django'
         }
     }
 }
