@@ -69,12 +69,12 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'django',
-        'CLIENT': {
-            'host': 'mongodb://db:27017',
-            'username': 'admin',
-            'password': 'root1234',
-        }
+        'NAME': 'django'
+        # 'CLIENT': {
+        #     'host': 'mongodb://db:27017',
+        #     'username': 'admin',
+        #     'password': 'root1234',
+        # }
     }
 }
 

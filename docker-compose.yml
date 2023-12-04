@@ -6,10 +6,10 @@ services:
   app:
     build: .
     volumes:
-      - .:/djangoProject
+      - .:/noBlog
     ports:
       - "8000:8000"
-    image: app:djangoProject
+    image: app:noBlog
     container_name: blog_container
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
@@ -27,9 +27,7 @@ services:
     ports:
       - "27017:27017"
     container_name: mongo_container
-#    depends_on:
-#      - migration
-#
+
   migration:
     build: .
     command: python manage.py migrate
