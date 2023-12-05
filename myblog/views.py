@@ -62,7 +62,7 @@ def logout_user(request):
 #         if form.is_valid():
 #             user = form.get_user()
 #             login(request, user)
-#             return redirect('home')  # Замените 'home' на вашу домашнюю страницу
+#             return redirect('home')
 #     else:
 #         form = CustomAuthenticationForm()
 #     return render(request, 'login2.html', {'form': form})
@@ -73,7 +73,7 @@ def logout_user(request):
 #         if form.is_valid():
 #             user = form.save()
 #             login(request, user)
-#             return redirect('home')  # Замените 'home' на вашу домашнюю страницу
+#             return redirect('home')
 #     else:
 #         form = CustomUserCreationForm()
 #     return render(request, 'register2.html', {'form': form})
