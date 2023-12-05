@@ -1,0 +1,6 @@
+<!-- Ваш HTML-код для модального окна регистрации -->
+<form method="post" action="{% url 'register2' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Зарегистрироваться</button>
+</form>

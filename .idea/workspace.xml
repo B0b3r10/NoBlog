@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ac82a01-ed64-4124-9dca-059d9c749cc6" name="Changes" comment="add registration">
+    <list default="true" id="6ac82a01-ed64-4124-9dca-059d9c749cc6" name="Changes" comment="add translator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myblog/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myblog/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myblog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myblog/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,7 +227,8 @@
       <workItem from="1701687066692" duration="11407000" />
       <workItem from="1701707446063" duration="315000" />
       <workItem from="1701707803877" duration="254000" />
-      <workItem from="1701708084097" duration="4142000" />
+      <workItem from="1701708084097" duration="6617000" />
+      <workItem from="1701785265693" duration="110000" />
     </task>
     <task id="LOCAL-00001" summary="Create admin">
       <option name="closed" value="true" />
@@ -356,7 +358,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701710065681</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="add translator">
+      <option name="closed" value="true" />
+      <created>1701712436773</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1701712436773</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -386,7 +396,8 @@
     <MESSAGE value="docker built" />
     <MESSAGE value="unresolved" />
     <MESSAGE value="add registration" />
-    <option name="LAST_COMMIT_MESSAGE" value="add registration" />
+    <MESSAGE value="add translator" />
+    <option name="LAST_COMMIT_MESSAGE" value="add translator" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

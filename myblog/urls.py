@@ -7,5 +7,7 @@ urlpatterns = [
     path('imput/', InputPageView.as_view(), name='imput'),
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
-    path('register/', RegisterUser.as_view(), name='register')
+    path('register/', RegisterUser.as_view(), name='register'),
+    # path('login2/', login_view, name='login2'),
+    # path('register2/', register_view, name='register2'),
     ]

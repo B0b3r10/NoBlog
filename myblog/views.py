@@ -51,3 +51,29 @@ class LoginUser(LoginView):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+# Registration Window
+# from django.shortcuts import render
+# from .forms import CustomUserCreationForm, CustomAuthenticationForm
+#
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = CustomAuthenticationForm(request, request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('home')  # Замените 'home' на вашу домашнюю страницу
+#     else:
+#         form = CustomAuthenticationForm()
+#     return render(request, 'login2.html', {'form': form})
+#
+# def register_view(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             return redirect('home')  # Замените 'home' на вашу домашнюю страницу
+#     else:
+#         form = CustomUserCreationForm()
+#     return render(request, 'register2.html', {'form': form})

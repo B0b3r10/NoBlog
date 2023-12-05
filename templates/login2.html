@@ -1,0 +1,6 @@
+<!-- Ваш HTML-код для модального окна входа -->
+<form method="post" action="{% url 'login2' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+</form>
