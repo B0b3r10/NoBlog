@@ -1,6 +1,27 @@
-<!-- Ваш HTML-код для модального окна входа -->
-<form method="post" action="{% url 'login2' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Войти</button>
-</form>
+<!-- Модальное окно для авторизации -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Авторизация</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_username">Логин:</label>
+                        <input type="text" name="username" id="id_username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password">Пароль:</label>
+                        <input type="password" name="password" id="id_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

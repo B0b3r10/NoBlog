@@ -1,10 +1,12 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic import ListView, TemplateView, CreateView
-from .models import *
+from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
+
 from .forms import *
+from .models import *
 
 
 class BlogListView(ListView):
@@ -18,6 +20,7 @@ class AboutPageView(TemplateView):
 
 class InputPageView(TemplateView):
     template_name = 'imput.html'
+
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
@@ -50,30 +53,4 @@ class LoginUser(LoginView):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
-
-# Registration Window
-# from django.shortcuts import render
-# from .forms import CustomUserCreationForm, CustomAuthenticationForm
-#
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = CustomAuthenticationForm(request, request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomAuthenticationForm()
-#     return render(request, 'login2.html', {'form': form})
-#
-# def register_view(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomUserCreationForm()
-#     return render(request, 'register2.html', {'form': form})
+    return redirect('home')

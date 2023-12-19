@@ -13,6 +13,19 @@
                 </div>
             </div>
         </div>
-
     {% endfor %}
+
+    <!-- Добавляем форму для ввода текста -->
+    <div style="margin-top: 2%">
+        <form method="post" id="sentiment-form">
+            {% csrf_token %}
+            <label for="text-input">Введите текст для анализа тональности:</label>
+            <textarea name="text" id="text-input" rows="4" cols="50"></textarea>
+            <button type="submit">Анализировать</button>
+        </form>
+
+        <!-- Поле для вывода результата -->
+        <div id="result-container" style="margin-top: 1%"></div>
+    </div>
+
 {% endblock content %}
