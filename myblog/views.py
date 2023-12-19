@@ -75,15 +75,29 @@ def profile(request):
 
     return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
 
-def edit_profile(request):
-    user_profile = request.user.userprofile
+class SearchView(TemplateView):
+    def search_view(request):
+        query = request.GET.get('q')
 
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if not query:
+            return redirect('home')
+
+        results = Post.objects.filter(title__icontains=query) | Post.objects.filter(body__icontains=query)
+
+        context = {'results': results, 'query': query, 'item': "post"}
+        return render(request, 'search_results.html', context)
+
+
+class AdvancedSearchView(TemplateView):
+    def advanced_search_view(request):
+        form = AdvancedSearchForm(request.GET)
+        results = []
+
         if form.is_valid():
-            form.save()
-            return redirect('profile')  # Перенаправьте пользователя на страницу профиля после сохранения
-    else:
-        form = UserProfileForm(instance=user_profile)
+            title_query = form.cleaned_data.get('title', '')
+            body_query = form.cleaned_data.get('body', '')
 
-    return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
+            results = Post.objects.filter(title__icontains=title_query, body__icontains=body_query)
+
+        context = {'form': form, 'results': results}
+        return render(request, 'advanced_search.html', context)

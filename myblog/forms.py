@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
 from .models import *
 
 
@@ -20,9 +19,6 @@ class LoginUserForm(AuthenticationForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
 
-from django import forms
-from .models import UserProfile
-
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
@@ -32,3 +28,8 @@ class UserProfileForm(forms.ModelForm):
     last_name = forms.CharField(label='Фамилия', required=False)
     middle_name = forms.CharField(label='Отчество', required=False)
     avatar = forms.ImageField(label='Аватар', required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+
+class AdvancedSearchForm(forms.Form):
+    title = forms.CharField(required=False, label='Заголовок')
+    body = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 4}), label='Текст')
