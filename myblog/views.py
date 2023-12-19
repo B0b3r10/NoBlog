@@ -1,9 +1,9 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.views.generic import ListView, TemplateView, CreateView
-from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .forms import *
 from .models import *
@@ -54,3 +54,36 @@ class LoginUser(LoginView):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+
+@login_required
+def profile(request):
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    if user_profiles.exists():
+        user_profile = user_profiles.first()
+    else:
+        user_profile = UserProfile(user=request.user)
+        user_profile.save()
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
+
+def edit_profile(request):
+    user_profile = request.user.userprofile
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Перенаправьте пользователя на страницу профиля после сохранения
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
