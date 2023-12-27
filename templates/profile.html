@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Мой профиль</h2>
+    {% if user_profile.avatar %}
+        <img src="{{ user_profile.avatar.url }}" alt="Avatar" width="200" height="200">
+    {% else %}
+        <p>Аватар не загружен.</p>
+    {% endif %}
+    <p>Фамилия: {{ user_profile.last_name }}</p>
+    <p>Имя: {{ user_profile.first_name }}</p>
+    <p>Отчество: {{ user_profile.middle_name }}</p>
+
+    <button id="editProfileBtn">Редактировать профиль</button>
+
+    <div id="editProfileForm" style="display: none;">
+        <p></p>
+        <form method="post" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('editProfileBtn').addEventListener('click', function() {
+            document.getElementById('editProfileForm').style.display = 'block';
+        });
+    </script>
+{% endblock %}

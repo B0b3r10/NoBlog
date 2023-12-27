@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djongo',
-    'myblog'
+    'myblog',
+    'temperature'
 ]
 
 MIDDLEWARE = [
