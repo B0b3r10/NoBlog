@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djongo',
-    'myblog'
+    'myblog',
+    'temperature'
 ]
 
 MIDDLEWARE = [
@@ -70,9 +71,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'django',
+<<<<<<< HEAD
         'CLIENT': {
             'host': 'mongodb://db:27017/django'
         }
+=======
+        # 'CLIENT': {
+        #     'host': 'mongodb://db:27017/django'
+        # }
+>>>>>>> docker
     }
 }
 
