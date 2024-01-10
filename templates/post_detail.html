@@ -12,4 +12,14 @@
   </div>
 </div>
 
+
+
+
+    <form method="GET" action="{% url 'search_post' %}">
+  {% csrf_token %}
+  {{ search_form.as_p }}
+        <input type="text" name="search_word">
+  <button type="submit">Search</button>
+</form>
+
 {% endblock content %}

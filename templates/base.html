@@ -49,6 +49,17 @@
             </div>
         </nav>
     </header>
+                        <form class="navbar-form" role="search" method="GET" action="{% url 'search' %}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Поиск" name="q"
+                                       value="{{ query }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-light" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
     <div style="color: #000000; border: none;">
         {% block content %}
         {% endblock content %}

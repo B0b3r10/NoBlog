@@ -1,0 +1,11 @@
+{% if posts %}
+  <h2>Search Results:</h2>
+  <ul>
+    {% for post in posts %}
+      <li>{{ post.title }}</li>
+        {{ post.body }}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No results found.</p>
+{% endif %}

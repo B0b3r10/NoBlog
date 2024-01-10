@@ -22,3 +22,6 @@ from django.contrib.auth.models import User
 class LoginForm1(AuthenticationForm):
     username = forms.CharField(label="Имя пользователя")
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
+
+class SearchForm(forms.Form):
+    search_word = forms.CharField(label='Search')
