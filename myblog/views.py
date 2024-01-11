@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import ListView, TemplateView, CreateView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
@@ -12,6 +12,7 @@ from .models import *
 class BlogListView(ListView):
     model = Post
     template_name = 'home.html'
+    paginate_by = 4
 
 
 class AboutPageView(TemplateView):
@@ -20,6 +21,11 @@ class AboutPageView(TemplateView):
 
 class InputPageView(TemplateView):
     template_name = 'imput.html'
+
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
 
 
 class RegisterUser(CreateView):
@@ -75,6 +81,7 @@ def profile(request):
 
     return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
 
+
 class SearchView(TemplateView):
     def search_view(request):
         query = request.GET.get('q')
@@ -84,8 +91,7 @@ class SearchView(TemplateView):
 
         results = Post.objects.filter(title__icontains=query) | Post.objects.filter(body__icontains=query)
 
-        context = {'results': results, 'query': query, 'item': "post"}
-        return render(request, 'search_results.html', context)
+        return render(request, 'search_results.html', {'results': results, 'query': query, 'item': "post"})
 
 
 class AdvancedSearchView(TemplateView):
@@ -96,8 +102,15 @@ class AdvancedSearchView(TemplateView):
         if form.is_valid():
             title_query = form.cleaned_data.get('title', '')
             body_query = form.cleaned_data.get('body', '')
+            author = form.cleaned_data.get('author', None)
 
-            results = Post.objects.filter(title__icontains=title_query, body__icontains=body_query)
+            queryset = Post.objects.all()
 
-        context = {'form': form, 'results': results}
-        return render(request, 'advanced_search.html', context)
+            if title_query:
+                results = queryset.filter(title__icontains=title_query)
+            if body_query:
+                results = queryset.filter(description__icontains=body_query)
+            if author:
+                results = queryset.filter(author=author)
+
+        return render(request, 'advanced_search.html', {'form': form, 'results': results})

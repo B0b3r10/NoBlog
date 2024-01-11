@@ -1,0 +1,32 @@
+.list-pages {
+    text-align: center;
+}
+
+.list-pages ul {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+.list-pages li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.page-num-selected a {
+    background-color: #8B00FF;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.page-num a {
+    background-color: #cccccc;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.page-num a:hover {
+    background-color: #ddd;
+}

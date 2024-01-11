@@ -32,4 +32,5 @@ class UserProfileForm(forms.ModelForm):
 
 class AdvancedSearchForm(forms.Form):
     title = forms.CharField(required=False, label='Заголовок')
-    body = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 4}), label='Текст')
+    body = forms.CharField(required=False, label='Содержание')
+    author = forms.ModelChoiceField(required=False, queryset=User.objects.all(), label='Автор')

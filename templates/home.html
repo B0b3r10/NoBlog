@@ -5,10 +5,11 @@
         <div style="margin-top: 1%">
             <div class="post-entry">
                 <div class="bg-image card shadow-1-strong"
-                     style="background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(106,68,76,1) 100%);">
+                     style="background-color: rgba(0, 0, 0, 0); border: none;">
                     <div style="margin-left: 1%">
                         <h2>{{ post.title }}</h2>
-                        <p>{{ post.body }}</p>
+                        <p>{{ post.body|truncatechars:200 }}&hellip;</p>
+                        <a href="{% url 'post_detail' post.slug  %}" class="btn btn-outline-secondary btn-sm">Подробнее</a>
                     </div>
                 </div>
             </div>
