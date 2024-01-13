@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <h2>Модели оценки комментария</h2>
+    <p>{{ "Нажаните кнопки выбирает случайный комментарий" }}</p>
+    <p>reviewReal: {{ reviewReal }} </p>
+    <p>reviewone {{ reviewone }} </p>
+    <form method="POST">
+        {% csrf_token %}
+        <input class="mx-auto" type="submit" value="Предсказать" name="Toxic"/>
+    </form>
+
+{% endblock content %}

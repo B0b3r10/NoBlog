@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <h2>Модели предсказывания температуры</h2>
+    <p>{{ "Нажаните кнопки выбирает случайное значение параметров" }}</p>
+    <p>MIN_real: {{ MIN_real }} MAX_real: {{ MAX_real }}</p>
+    <p>MIN_pred {{ MIN_pred }} MAX_pred: {{ MAX_pred }}</p>
+    <form method="POST">
+        {% csrf_token %}
+        <input class="mx-auto" type="submit" value="Предсказать" name="RandX"/>
+    </form>
+
+{% endblock content %}

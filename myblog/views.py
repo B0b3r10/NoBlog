@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import ListView, TemplateView, CreateView, DetailView
-from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+
+
 
 from .forms import *
 from .models import *
+
 
 class BlogListView(ListView):
     model = Post
@@ -79,21 +81,6 @@ def profile(request):
 
     return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
 
-
-def edit_profile(request):
-    user_profile = request.user.userprofile
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')  # Перенаправьте пользователя на страницу профиля после сохранения
-    else:
-        form = UserProfileForm(instance=user_profile)
-
-    return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
-
-
 class SearchView(TemplateView):
     def search_view(request):
         query = request.GET.get('q')
@@ -103,8 +90,7 @@ class SearchView(TemplateView):
 
         results = Post.objects.filter(title__icontains=query) | Post.objects.filter(body__icontains=query)
 
-        context = {'results': results, 'query': query, 'item': "post"}
-        return render(request, 'search_results.html', context)
+        return render(request, 'search_results.html', {'results': results, 'query': query, 'item': "post"})
 
 
 class AdvancedSearchView(TemplateView):
@@ -115,8 +101,17 @@ class AdvancedSearchView(TemplateView):
         if form.is_valid():
             title_query = form.cleaned_data.get('title', '')
             body_query = form.cleaned_data.get('body', '')
+            author = form.cleaned_data.get('author', None)
 
-            results = Post.objects.filter(title__icontains=title_query, body__icontains=body_query)
+            queryset = Post.objects.all()
 
-        context = {'form': form, 'results': results}
-        return render(request, 'advanced_search.html', context)
+            if title_query:
+                results = queryset.filter(title__icontains=title_query)
+            if body_query:
+                results = queryset.filter(description__icontains=body_query)
+            if author:
+                results = queryset.filter(author=author)
+
+        return render(request, 'advanced_search.html', {'form': form, 'results': results})
+
+

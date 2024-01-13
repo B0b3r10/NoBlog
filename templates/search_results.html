@@ -1,33 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if not query %}
-        <script>
-            window.location.href = "/";
-        </script>
-    {% else %}
-        <h2>Результаты поиска для "{{ query }}"</h2>
 
-    {% if results and item == "post" %}
-            {% for result in results %}
-                <div style="margin-top: 1%">
-            <div class="post-entry">
-                <div class="bg-image card shadow-1-strong">
-                    <div style="margin-left: 1%"><h4><span style="color: #000000; ">{{ result.title }}</span></h4>
-                        <p><span style="color: #000000; ">{{ result.body }}</span></p>
+    <div class="container" style="margin: 0; max-width: 100%; width: 100%">
+        <h1>Результаты поиска для "{{ query }}"</h1>
+        {% if results %}
+            <div class="container" style="margin: 0; max-width: 100%; width: 100%">
+                <div class="row">
+                    {% for post in results %}
+                        <div class="card mb-4 mt-3 left top" style="padding-left: 0">
+                            <div class="card-body">
+                                <h1>{{ post.title }}</h1>
+                                <p class="text-muted">{{ post.author }} | {{ post.created_on }}</p>
+                                <p class="card-text">{{ post.body | safe }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-            {% endfor %}
-    {% elif results and item == "review" %}
-            {% for result in results %}
-                <div style="margin-top: 1%">
-            <div class="post-entry">
-            </div>
-        </div>
-            {% endfor %}
-    {% else %}
-        <p>По вашему запросу ничего не найдено.</p>
-    {% endif %}
-     {% endif %}
+        {% else %}
+            <p>По вашему запросу ничего не найдено.</p>
+        {% endif %}
+    </div>
+
 {% endblock %}

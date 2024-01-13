@@ -1,15 +1,18 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top">
-      <div class="card-body">
-        <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
-        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
-        <p class="card-text ">{{ object.body | safe }}</p>
-      </div>
+{% block content %}
+
+    <div class="container-fluid" style="padding: 0 12px">
+        <div class="row">
+            <div class="card" style="border: none">
+                <div class="card-body">
+                    <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
+                    <p class="text-muted">{{ post.author }} | {{ post.created_on }}</p>
+                    <p class="card-text">{{ object.body | safe }}</p>
+                    <a href="{% url 'home' %}"><button class="btn btn-secondary mt-2">Назад</button></a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 {% endblock content %}

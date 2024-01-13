@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Обучение моделей предсказывания температуры</h2>
+    <p>{{"Нажатие кнопки выбирает случайное значение random_state от 0 до 10000"}}</p>
+    <p>Random_state:{{ Random_state }}</p>
+    <p>MIN_MSE: {{MIN_MSE}} MAX_MSE: {{MAX_MSE}}</p>
+    <p>MIN_R2: {{MIN_R2}} MAX_R2: {{MAX_R2}}</p>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Обучить" name="learn"/>
+    </form>
+{% endblock content %}
