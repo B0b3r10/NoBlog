@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <h2>Модель оценки токсичности</h2>
+    <p>Оценка: {{ toxic_result }} </p>
+    <p>Предложение: {{ sentense }} </p>
+    <p>{{ "Нажатие кнопки выберет случайный комментарий и оценит его" }}</p>
+    <form id="myForm" method="post" action="{% url 'Toxic_predict' %}">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-secondary d-block mt-2" name="button_pressed" value="Toxic predict">
+    </form>
+
+{% endblock %}

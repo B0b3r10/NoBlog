@@ -13,6 +13,8 @@ import torch.nn.functional as F
 import itertools
 from django.shortcuts import render
 from joblib import load
+from tensorflow.python.keras.utils.np_utils import to_categorical
+
 from TemperatureModel.Params_Temp import getingX
 from TemperatureModel.Params_Temp import preprocessing
 from sklearn.model_selection import train_test_split
@@ -31,7 +33,6 @@ nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
-
 
 value_list = [[2.00000000e+00, 3.19000000e+01, 2.16000000e+01, 5.22633972e+01,
                9.06047211e+01, 2.98506886e+01, 2.40350093e+01, 5.69188993e+00,
@@ -111,6 +112,10 @@ def Temperature_predict(request):
                                                         'MAX_pred': round(MAX_pred[0], 2)})
 
 
+def home(request):
+    return render(request, 'HomePage.html')
+
+
 def preprocess_text(text: str):
     x = (re.sub(r"[.,;$&!?=\\_`'-/:#~]+|[\d]+", " ",
                 text.lower()))  # удаление пунктуации цифр и приведение к нижнему регистру
@@ -137,9 +142,6 @@ class Vocab:
         self.idx_to_token = dict(zip(self.idx, self.token))
         self.token_to_idx = dict(zip(self.token, self.idx))
         self.vocab_len = len(self.idx_to_token)
-
-
-torch.manual_seed(0)
 
 
 class Classifier(nn.Module):
@@ -174,67 +176,114 @@ class Classifier(nn.Module):
         return x
 
 
-model = pickle.load(open(r'E:\NoSql\djangoProject\SavedModels\Toxic Selftokenizer model.sav', 'rb'))
+class ReviewDataset(Dataset):
+    def __init__(self, X, y, vocab):
+        self.X = X
+        self.y = y
+        self.vocab = vocab
+
+    def vectorize(self, words):
+        vector = torch.zeros(self.vocab.vocab_len, dtype=torch.float32)
+        for l in words:
+            vector[self.vocab.token_to_idx[l]] = 1
+        return vector
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        X = self.vectorize(self.X[idx])
+        y = torch.tensor(self.y[idx], dtype=torch.float32)
+        return X, y
+
+
+def test_accuracy(model, dataloader):
+    criterion = nn.CrossEntropyLoss()
+    model.eval()
+    accuracy = 0
+    epoch_loss = 0
+    with torch.no_grad():
+        for X_batch, y_batch in dataloader:
+            y_pred = model(X_batch)
+            loss = criterion(y_pred, y_batch)
+            y_batch = torch.argmax(y_batch, axis=1)
+            y_pred = torch.argmax(y_pred, axis=1)
+            accuracy += torch.sum(y_batch == y_pred)
+            epoch_loss += loss.item()
+    accuracy = accuracy.item() / len(dataloader.dataset)
+    return accuracy, epoch_loss
+
+
 data = pd.read_csv(r'E:\NoSql\djangoProject\SavedModels\Toxic dataset.csv')
-data_orig = pd.read_csv(r'E:\NoSql\djangoProject\SavedModels\Toxic.csv')
+data_orig = pd.read_csv(r'E:\NoSql\djangoProject\SavedModels\Toxic origin.csv')
 data['toxic'] = data['toxic'].astype(int)
-data['comment'] =[str(i).split() for i in data['comment']]
+data['comment'] = [str(i).split() for i in data['comment']]
 
 
-commentcheck = data_orig.iloc[random.randint(1, len(data_orig))]
-reviewone = commentcheck['comment']
-reviewReal = commentcheck['toxic']
-if reviewReal: reviewReal = "Toxic"
-else : reviewReal = "Non Toxic"
-print(reviewone)
-print(reviewReal)
-try:
-  pred=model(vectorize(preprocess_text(reviewone),Vocab(data['comment'])).unsqueeze(0))
-  if np.argmax(pred.detach().numpy(), axis=1):
-    print('Toxic')
-  else:
-    print('Non toxic')
-except:
-    print('В словаре отсутствуют набранные слова')
+def Toxic_learning(request):
+    dataset = ReviewDataset([i for i in data['comment']], to_categorical(data.toxic, 2),
+                            Vocab([i for i in data['comment']]))
+    dataset_train_size = round(len(dataset) * 0.8)
+    dataset_test_size = len(dataset) - dataset_train_size
+    dataset_train, dataset_test = torch.utils.data.random_split(dataset, [dataset_train_size, dataset_test_size])
+    batch_size = 2048
+    num_epochs = 5
+    num_classes = 2
+    learning_rate = 0.01
+    trainloader = DataLoader(dataset=dataset_train, batch_size=batch_size, shuffle=True)
+    testloader = DataLoader(dataset=dataset_test, batch_size=batch_size)
+
+    model = Classifier(dataset_train[0][0].size(0), dataset_train[0][1].size(0))
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    total_step = len(trainloader)
+    loss_list = []
+    learning_process = 0
+    train_epoch_res, test_epoch_res = '', ''
+    if request.method == 'POST':
+        button_pressed = request.POST.get('button_pressed')
+        if button_pressed == "Start learning":
+            print("обучение началось")
+            for epoch in range(num_epochs):
+                for i, (X, y) in enumerate(trainloader, 0):
+                    outputs = model(X, training=True)
+                    loss = criterion(outputs, y)
+
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+                    total = y.size(0)
+                train_accuracy_, train_loss = test_accuracy(model, trainloader)
+                train_epoch_res = ('Epoch [{}/{}], Loss: {:.4f}, trainAccuracy: {:.2f}%'
+                                   .format(epoch + 1, num_epochs, (train_loss / len(trainloader)),
+                                           train_accuracy_ * 100))
+                print(train_epoch_res)
+
+                test_accuracy_, test_loss = test_accuracy(model, testloader)
+                test_epoch_res = (
+                    'Loss: {:.4f}, testAccuracy: {:.2f}%'.format((test_loss / len(testloader)), test_accuracy_ * 100))
+                print(test_epoch_res)
+                loss_list.append((test_loss / len(testloader)))
+
+    return render(request, 'Toxic learning.html',
+                  {'train_epoch_res': train_epoch_res, 'test_epoch_res': test_epoch_res})
+
 
 def Toxic_predict(request):
-    commentcheck = data_orig.iloc[random.randint(1, len(data_orig))]
-    reviewone = commentcheck['comment']
-    reviewReal = commentcheck['toxic']
-    if reviewReal:
-        reviewReal = "Toxic"
-    else:
-        reviewReal = "Non Toxic"
-    print(reviewone)
-    print(reviewReal)
-    try:
-        pred = model(preprocessing(reviewone))
-        if np.argmax(pred.detach().numpy(), axis=1):
-            print('Toxic')
-        else:
-            print('Non toxic')
-    except:
-        print('В словаре отсутствуют набранные слова')
-
-    return render(request, 'Toxic_predict.html', {'reviewReal': reviewReal,
-                                                  'reviewone': reviewone})
-
-
-# def sentiment_analysis_view(request):
-#     if request.method == 'POST':
-#         text = request.POST['text']
-#         model = pickle.load(open(r'E:\NoSql\djangoProject\SavedModels\Toxic model.joblib','rb'))
-#         data = pd.read_csv(r'E:\NoSql\djangoProject\SavedModels\Toxic dataset.csv')
-#         data['toxic'] = data['toxic'].astype(int)
-#         data['comment'] = [str(i).split() for i in data['comment']]
-#         try:
-#             pred = model.predict(vectorize(preprocess_text(text), Vocab(data['comment'])).unsqueeze(0))
-#             if np.argmax(pred.detach().numpy(), axis=1) == 1:
-#                 print('Toxic')
-#             else:
-#                 print('Non toxic')
-#         except:
-#             print('В словаре отсутствуют набранные слова')
-#
-#         # Render the template with the prediction result
-#         return render(request, 'Toxic_predict.html', {'prediction': prediction})
+    loaded_model = torch.load(r'E:\NoSql\djangoProject\SavedModels\Toxic_Teached_model.pt')
+    sentense = ''
+    toxic_result = ''
+    if request.method == 'POST':
+        button_pressed = request.POST.get('button_pressed')
+        if button_pressed == 'Toxic predict':
+            sentense = str(data_orig['comment'][random.randint(1, 10000)])
+            print(sentense)
+            try:
+                pred = loaded_model(vectorize(preprocess_text(sentense), Vocab(data['comment'])).unsqueeze(0))
+                if np.argmax(pred.detach().numpy(), axis=1):
+                    toxic_result = 'Toxic'
+                else:
+                    toxic_result = 'Non toxic'
+            except:
+                toxic_result = 'В словаре отсутствуют набранные слова'
+    return render(request, 'Toxic predict.html', {'sentense': sentense, 'toxic_result': toxic_result})

@@ -3,6 +3,7 @@ from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from TemperatureModel import views as Tviews
+from TemperatureModel import views
 
 
 urlpatterns = [
@@ -18,8 +19,8 @@ urlpatterns = [
     path('search', SearchView.search_view, name='search'),
     path('Temperature_learning', Tviews.Temperature_learning,name='Temperature_learning'),
     path('Temperature_predict', Tviews.Temperature_predict,name='Temperature_predict'),
-    path('Toxic_predict', Tviews.Toxic_predict, name='Toxic_predict'),
-
+    path('Toxic_learning', views.Toxic_learning, name='Toxic_learning'),
+    path('Toxic_predict', views.Toxic_predict, name='Toxic_predict'),
     # path('search_post', SearchViewPost.as_view(), name='search_post'),
     path('<slug:slug>/', PostDetail.as_view(), name='post_detail')
     ]

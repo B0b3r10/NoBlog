@@ -1,7 +1,41 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
 import os
 import sys
+import os
+import sys
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+class Classifier(nn.Module):
+    def __init__(self, input_features, output_features):
+        super(Classifier, self).__init__()
+        self.layer1 = nn.Linear(input_features, 512)
+        self.batchnorm1 = nn.BatchNorm1d(512)
+        self.layer2 = nn.Linear(512, 256)
+        self.batchnorm2 = nn.BatchNorm1d(256)
+        self.layer3 = nn.Linear(256, 128)
+        self.batchnorm3 = nn.BatchNorm1d(128)
+        self.layer4 = nn.Linear(128, 64)
+        self.batchnorm4 = nn.BatchNorm1d(64)
+        self.layer5 = nn.Linear(64, output_features)
+
+    def forward(self, x, training=True):
+        x = self.layer1(x)
+        x = self.batchnorm1(x)
+        x = F.relu(x)
+        x = F.dropout(x, training=training)
+        x = self.layer2(x)
+        x = self.batchnorm2(x)
+        x = F.relu(x)
+        x = self.layer3(x)
+        x = self.batchnorm3(x)
+        x = F.relu(x)
+        x = self.layer4(x)
+        x = self.batchnorm4(x)
+        x = F.relu(x)
+        x = self.layer5(x)
+        x = F.softmax(x, dim=1)
+        return x
 
 
 def main():

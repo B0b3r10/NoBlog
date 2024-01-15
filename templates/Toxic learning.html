@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <h2>Модель оценки токсичности</h2>
+    <p>{{ "Нажатие кнопки запускает процесс обучения модели" }}</p>
+    <form id="myForm" method="post" action="{% url 'Toxic_learning' %}">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-secondary d-block mt-2" name="button_pressed" value="Start learning">
+        <input type="submit" class="btn btn-secondary d-block mt-2" name="button_pressed" value="Stop learning">
+    </form>
+    <p>{{ train_epoch_res }} </p>
+    <p>{{ test_epoch_res }} </p>
+{% endblock %}
