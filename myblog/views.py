@@ -4,9 +4,6 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-
-
-
 from .forms import *
 from .models import *
 
@@ -28,6 +25,7 @@ class InputPageView(TemplateView):
 class PostDetail(DetailView):
     model = Post
     template_name = 'post_detail.html'
+
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
@@ -62,6 +60,7 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
+
 @login_required
 def profile(request):
     user_profiles = UserProfile.objects.filter(user=request.user)
@@ -80,6 +79,7 @@ def profile(request):
         form = UserProfileForm(instance=user_profile)
 
     return render(request, 'profile.html', {'form': form, 'user_profile': user_profile})
+
 
 class SearchView(TemplateView):
     def search_view(request):
