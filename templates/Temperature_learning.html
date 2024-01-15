@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="container-fluid" style="padding: 0 11px; margin-top: 1%;">
     <h2>Обучение моделей предсказывания температуры</h2>
     <p>{{"Нажатие кнопки выбирает случайное значение random_state от 0 до 10000"}}</p>
     <p>Random_state:{{ Random_state }}</p>
@@ -10,4 +11,5 @@
         {% csrf_token %}
         <input type="submit" value="Обучить" name="learn"/>
     </form>
+    </div>
 {% endblock content %}
